@@ -1,30 +1,29 @@
+import React, { useState } from "react";
 import { InboxOutlined } from "@ant-design/icons";
 import { message, Upload } from "antd";
 import "./index.css";
 
 function MainPage() {
   const { Dragger } = Upload;
-  const fileContents = [];
-
+  const [fileContents, setFileContents] = useState("");
   const props = {
     name: "file",
     multiple: true,
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+    action: "https://run.mocky.io/v3/ed900ade-5c2c-4c27-9fdc-ba5893f7e2fc",
     onChange(info) {
       const { status } = info.file;
       if (status !== "uploading") {
-        console.log(info.file, info.fileList);
+        // console.log(info.file, info.fileList);
       }
       if (status === "done") {
         message.success(`${info.file.name} file uploaded successfully.`);
         const fileReader = new FileReader();
         fileReader.onload = (event) => {
           const fileContent = event.target.result;
-          fileContents.push(fileContent);
+          setFileContents((prevContents) => prevContents + fileContent);
+          console.log(fileContent);
         };
         fileReader.readAsText(info.file.originFileObj);
-        console.log(fileContents);
-        checkWordCount();
       } else if (status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
@@ -41,9 +40,6 @@ function MainPage() {
     },
   };
 
-  const checkWordCount = () => {
-    fileContents.forEach((fileContent) => {});
-  };
   return (
     <>
       <Dragger {...props}>
@@ -56,9 +52,8 @@ function MainPage() {
 
         <p className="ant-upload-hint">Support for a single or bulk upload</p>
       </Dragger>
-      {fileContents.map((i) => (
-        <h1>{i}</h1>
-      ))}
+
+      {fileContents}
     </>
   );
 }
