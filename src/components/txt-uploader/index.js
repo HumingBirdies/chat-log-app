@@ -1,11 +1,12 @@
-import React, { useState } from "react";
 import { InboxOutlined } from "@ant-design/icons";
 import { message, Upload } from "antd";
+import useStore from "../../store/index.js";
 import "./index.css";
 
 function MainPage() {
   const { Dragger } = Upload;
-  const [fileContents, setFileContents] = useState("");
+  const setFileContents = useStore((state) => state.setFileContents);
+
   const props = {
     name: "file",
     multiple: true,
@@ -17,19 +18,16 @@ function MainPage() {
       }
       if (status === "done") {
         message.success(`${info.file.name} file uploaded successfully.`);
+
         const fileReader = new FileReader();
         fileReader.onload = (event) => {
           const fileContent = event.target.result;
-          setFileContents((prevContents) => prevContents + fileContent);
-          console.log(fileContent);
+          setFileContents(fileContent);
         };
         fileReader.readAsText(info.file.originFileObj);
       } else if (status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
-    },
-    onDrop(e) {
-      console.log("Dropped files", e.dataTransfer.files);
     },
     beforeUpload: (file) => {
       const isTxt = file.type === "text/plain";
@@ -41,20 +39,16 @@ function MainPage() {
   };
 
   return (
-    <>
-      <Dragger {...props}>
-        <p className="ant-upload-drag-icon">
-          <InboxOutlined />
-        </p>
-        <p className="ant-upload-text">
-          Click or drag file to this area to upload
-        </p>
+    <Dragger {...props}>
+      <p className="ant-upload-drag-icon">
+        <InboxOutlined />
+      </p>
+      <p className="ant-upload-text">
+        Click or drag file to this area to upload
+      </p>
 
-        <p className="ant-upload-hint">Support for a single or bulk upload</p>
-      </Dragger>
-
-      {fileContents}
-    </>
+      <p className="ant-upload-hint">Support for a single or bulk upload</p>
+    </Dragger>
   );
 }
 
