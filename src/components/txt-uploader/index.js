@@ -43,9 +43,8 @@ function MainPage() {
 
       return isTxt || Upload.LIST_IGNORE;
     },
-    onRemove: (file) => {
-      setFileContents("");
-    },
+    onRemove: () => false,
+    removeIcon: null,
   };
 
   return (

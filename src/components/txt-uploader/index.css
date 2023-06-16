@@ -1,3 +1,7 @@
 .ant-upload {
   padding: 50px !important;
 }
+
+.ant-upload-list-item-actions {
+  display: none !important;
+}
