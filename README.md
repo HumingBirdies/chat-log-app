@@ -1,6 +1,6 @@
 # LOCAL RUN SCRIPT
-
-npm start
+1) npm i
+2) npm start
 
 # HOSTING PREVIEW
 
