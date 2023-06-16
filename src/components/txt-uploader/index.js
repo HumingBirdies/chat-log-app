@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { InboxOutlined } from "@ant-design/icons";
 import { message, Upload } from "antd";
 import useStore from "../../store/index.js";
@@ -5,7 +6,11 @@ import "./index.css";
 
 function MainPage() {
   const { Dragger } = Upload;
-  const setFileContents = useStore((state) => state.setFileContents);
+  const [fileList, setFileList] = useState([]);
+  const [fileContents, setFileContents] = useStore((state) => [
+    state.fileContents,
+    state.setFileContents,
+  ]);
 
   const props = {
     name: "file",
@@ -18,11 +23,12 @@ function MainPage() {
       }
       if (status === "done") {
         message.success(`${info.file.name} file uploaded successfully.`);
-
+        setFileList([...fileList, info.file]);
         const fileReader = new FileReader();
         fileReader.onload = (event) => {
-          const fileContent = event.target.result;
-          setFileContents(fileContent);
+          console.log(event);
+          const newContent = event.target.result;
+          setFileContents(newContent);
         };
         fileReader.readAsText(info.file.originFileObj);
       } else if (status === "error") {
@@ -34,21 +40,27 @@ function MainPage() {
       if (!isTxt) {
         message.error(`${file.name} is not a txt file`);
       }
+
       return isTxt || Upload.LIST_IGNORE;
+    },
+    onRemove: (file) => {
+      setFileContents("");
     },
   };
 
   return (
-    <Dragger {...props}>
-      <p className="ant-upload-drag-icon">
-        <InboxOutlined />
-      </p>
-      <p className="ant-upload-text">
-        Click or drag file to this area to upload
-      </p>
+    <>
+      <Dragger {...props}>
+        <p className="ant-upload-drag-icon">
+          <InboxOutlined />
+        </p>
+        <p className="ant-upload-text">
+          Click or drag file to this area to upload
+        </p>
 
-      <p className="ant-upload-hint">Support for a single or bulk upload</p>
-    </Dragger>
+        <p className="ant-upload-hint">Support for a single or bulk upload</p>
+      </Dragger>
+    </>
   );
 }
 

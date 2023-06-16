@@ -7,7 +7,17 @@
 }
 
 .log-content {
-  width: 250px;
-  height: 250px;
-  border: 2px solid red;
+  width: 350px;
+  height: 300px;
+  border: 1px solid rgb(240, 238, 238);
+  overflow-y: scroll;
+  padding-left: 20px;
+  background-color: #fafafa;
+}
+
+@media (max-width: 601px) {
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+  }
 }
